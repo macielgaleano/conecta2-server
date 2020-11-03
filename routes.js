@@ -18,7 +18,7 @@ const routes = (app) => {
   app.get("/usuario/:username", userController.userPage);
 
   //configurate username profile
-  app.get("/configuracion", userController.configuracion);
+  /* app.get("/configuracion", userController.configuracion); */
   app.post("/usuario/configuracion/imagen", userController.modifyProfileImage);
   app.post("/usuario/configuracion/datos", userController.modifyProfileData);
 

@@ -12,17 +12,19 @@ const followSubController = require("./subControllers/followSubController");
 const unfollowSubController = require("./subControllers/unfollowSubController");
 const suggestionFollowersSubController = require("./subControllers/suggestionFollowersSubController");
 const deleteKeySubController = require("./subControllers/deleteKeySubController");
+const listUsersSubController = require("./subControllers/listUsersSubController");
 
 const userController = {
-  createUser: createUserSubController(req, res),
-  login: loginSubController(req, res),
-  like: likeSubController(req, res),
-  userPage: userPageSubController(req, res),
-  modifyProfileImage: modifyProfileImageSubController(req, res),
-  modifyProfileData: modifyProfileDataSubController(req, res),
-  follow: followSubController(req, res),
-  unfollow: unfollowSubController(req, res),
-  suggestionFollowers: suggestionFollowersSubController(req, res),
-  deleteKey: deleteKeySubController(req, res),
+  createUser: (req, res) => createUserSubController(req, res),
+  login: (req, res) => loginSubController(req, res),
+  like: (req, res) => likeSubController(req, res),
+  userPage: (req, res) => userPageSubController(req, res),
+  modifyProfileImage: (req, res) => modifyProfileImageSubController(req, res),
+  modifyProfileData: (req, res) => modifyProfileDataSubController(req, res),
+  follow: (req, res) => followSubController(req, res),
+  unfollow: (req, res) => unfollowSubController(req, res),
+  suggestionFollowers: (req, res) => suggestionFollowersSubController(req, res),
+  deleteKey: (req, res) => deleteKeySubController(req, res),
+  listUsers: (req, res) => listUsersSubController(req, res),
 };
 module.exports = userController;

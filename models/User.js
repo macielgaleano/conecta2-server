@@ -15,11 +15,12 @@ const userSchema = new Schema(
     list_tweets: [{ type: Schema.Types.ObjectId, ref: "Tweet" }],
     list_users_following: [{ type: Schema.Types.ObjectId, ref: "User" }],
     list_users_followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    tokens: [],
   },
   { timestamps: true }
 );
 
-userSchema.pre(" save", function (next) {
+userSchema.pre("save", function (next) {
   var user = this;
   if (!user.isModified("password")) return next();
 
@@ -34,4 +35,7 @@ userSchema.pre(" save", function (next) {
     });
   });
 });
+userSchema.methods.validatePassword = function (password) {
+  return bcrypt.compare(password, this.password);
+};
 module.exports = userSchema;

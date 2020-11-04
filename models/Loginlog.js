@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const loginlogSchema = newSchema(
+const loginlogSchema = new Schema(
   {
     username: String,
     token: String,

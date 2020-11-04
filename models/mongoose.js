@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const tweetSchema = require("./Tweet");
+const noteSchema = require("./Note");
 const userSchema = require("./User");
 const loginlogSchema = require("./Loginlog");
 
@@ -14,13 +14,13 @@ mongoose.connection
   )
   .on("error", (error) => console.log(error));
 
-const Tweet = mongoose.model("Tweet", tweetSchema);
+const Note = mongoose.model("Note", noteSchema);
 const User = mongoose.model("User", userSchema);
 const Loginlog = mongoose.model("Loginlog", loginlogSchema);
 
 module.exports = {
   mongoose,
-  Tweet,
+  Note,
   User,
   Loginlog,
 };

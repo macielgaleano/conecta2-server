@@ -1,9 +1,8 @@
-const User = require("../../models/User");
-const jwt = require("jsonwebtoken");
+const db = require("../../models/mongoose");
 
 const createUserSubController = async (req, res) => {
   const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-  const user = await new User({
+  const user = await new db.User({
     name: req.body.name,
     lastname: req.body.lastname,
     username: req.body.username,
@@ -16,12 +15,6 @@ const createUserSubController = async (req, res) => {
     description: "Suba una nueva descripcion en configuracion",
   });
   user.save();
-  const token = jwt.sign({ id: user._id }, process.env.SECRET, {
-    expiresIn: 60 * 60 * 60,
-  });
-  res.json({ auth: true, token });
-  /* .then((user) => req.login(user, () => res.redirect("/login-registro")))
-          .catch((error) => res.redirect("/login-registro"));
-        */
+  res.json(user);
 };
 module.exports = createUserSubController;

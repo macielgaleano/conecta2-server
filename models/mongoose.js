@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const tweetSchema = require("./Tweet");
 const userSchema = require("./User");
+const loginlogSchema = require("./Loginlog");
 
 mongoose.connect(
   "mongodb+srv://conecta2:1234@cluster0.h9yty.mongodb.net/<conecta2>?authSource=admin&replicaSet=atlas-akyu8h-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true",
@@ -15,9 +16,11 @@ mongoose.connection
 
 const Tweet = mongoose.model("Tweet", tweetSchema);
 const User = mongoose.model("User", userSchema);
+const Loginlog = mongoose.model("Loginlog", loginlogSchema);
 
 module.exports = {
   mongoose,
   Tweet,
   User,
+  Loginlog,
 };

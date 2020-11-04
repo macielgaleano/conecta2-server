@@ -20,7 +20,11 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-userSchema.pre("save", function (next) {
+userSchema.methods.validatePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+userSchema.pre(" save", function (next) {
   var user = this;
   if (!user.isModified("password")) return next();
 
@@ -35,7 +39,4 @@ userSchema.pre("save", function (next) {
     });
   });
 });
-userSchema.methods.validatePassword = function (password) {
-  return bcrypt.compare(password, this.password);
-};
 module.exports = userSchema;

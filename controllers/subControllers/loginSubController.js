@@ -14,7 +14,7 @@ const loginSubController = async (req, res) => {
     ],
   });
   if (!user) {
-    res.status(404).send({
+    return res.status(404).send({
       auth: false,
       status: 404,
       messaggue: "El usuario o el mail que usted esta colocando no exste",
@@ -22,7 +22,7 @@ const loginSubController = async (req, res) => {
   }
   const passwordIsValid = await user.validatePassword(password);
   if (!passwordIsValid) {
-    res.status(401).json({
+    return res.status(401).json({
       auth: false,
       status: 401,
       token: null,

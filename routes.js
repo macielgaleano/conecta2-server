@@ -2,6 +2,10 @@ const noteController = require("./controllers/noteController");
 const userController = require("./controllers/userController");
 const seeder = require("./seeder");
 const routes = (app) => {
+  //Api
+
+  app.get("/api/list/users", (req, res) => userController.listUsers(req, res));
+
   //login
   app.post("/registro", userController.createUser);
   app.post("/login", userController.login);

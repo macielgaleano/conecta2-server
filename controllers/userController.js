@@ -12,6 +12,7 @@ const followSubController = require("./subControllers/followSubController");
 const unfollowSubController = require("./subControllers/unfollowSubController");
 const suggestionFollowersSubController = require("./subControllers/suggestionFollowersSubController");
 const deleteKeySubController = require("./subControllers/deleteKeySubController");
+const listUsersSubController = require("./subControllers/listUsersSubController");
 
 const userController = {
   createUser: (req, res) => createUserSubController(req, res),
@@ -24,5 +25,6 @@ const userController = {
   unfollow: (req, res) => unfollowSubController(req, res),
   suggestionFollowers: (req, res) => suggestionFollowersSubController(req, res),
   deleteKey: (req, res) => deleteKeySubController(req, res),
+  listUsers: (req, res) => listUsersSubController(req, res),
 };
 module.exports = userController;

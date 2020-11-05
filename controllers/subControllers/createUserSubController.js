@@ -14,7 +14,6 @@ const createUserSubController = async (req, res) => {
     list_users_followers: [],
     description: "Suba una nueva descripcion en configuracion",
   });
-  user.save();
   res.json(user);
 };
 module.exports = createUserSubController;

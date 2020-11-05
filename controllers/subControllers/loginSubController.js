@@ -29,7 +29,7 @@ const loginSubController = async (req, res) => {
       messaggue: "La password no es valida",
     });
   }
-  const token = jwt.sign({ id: user._id }, process.env.SECRET, {
+  const token = jwt.sign({ id: user.id }, process.env.SECRET, {
     expiresIn: 60 * 60 * 60,
   });
   user.tokens.push(token);

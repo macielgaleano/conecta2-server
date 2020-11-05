@@ -1,6 +1,6 @@
 const db = require("../../models/mongoose");
-const jwt = require("jsonwebtoken");
-const validateLoginSubController = require("./validateLoginSubController");
+/* const jwt = require("jsonwebtoken"); */
+/* const validateLoginSubController = require("./validateLoginSubController"); */
 
 const createNoteSubController = async (req, res) => {
   /*  if (
@@ -26,7 +26,7 @@ const createNoteSubController = async (req, res) => {
 
   const note = new db.Note({
     content: req.body.content,
-    author: req.user._id,
+    author: req.user.id,
     date_created: Date.now(),
   });
   await note.save();
@@ -35,6 +35,6 @@ const createNoteSubController = async (req, res) => {
   await user.save();
   res.json(note);
 
-  res.status(401).json({ auth: false, messague: "Not auth" });
+  /*  res.status(401).json({ auth: false, messague: "Not auth" }); */
 };
 module.exports = createNoteSubController;

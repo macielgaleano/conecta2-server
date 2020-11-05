@@ -7,7 +7,7 @@ const createUserSubController = async (req, res) => {
     lastname: req.body.lastname,
     username: req.body.username,
     email: req.body.email,
-    password: hashedPassword, //?
+    password: hashedPassword,
     avatar: "/images/anonimo.png",
     list_tweets: [],
     list_users_following: [],

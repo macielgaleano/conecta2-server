@@ -17,8 +17,8 @@ const routes = (app) => {
   //notes
   app.post(
     "/note/crear",
-    checkJwt({ secret: process.env.SECRET }),
-    (req, res) => noteController.createNote(req, res)
+    checkJwt({ secret: process.env.SECRET, algorithms: ["HS256"] }),
+    noteController.createNote
   );
   app.get("/usuario/:noteId/borrar", noteController.delete);
   app.get("/usuario/:username/like/:note", (req, res) =>

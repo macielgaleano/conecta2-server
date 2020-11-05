@@ -14,13 +14,21 @@ const routes = (app) => {
   app.get("/creardata", seeder.createData);
 
   //notes
-  app.post("/note/crear", noteController.createNote);
+  app.post(
+    "/note/crear",
+    checkJwt({ secret: process.env.SECRET }),
+    (req, res) => noteController.createNote(req, res)
+  );
   app.get("/usuario/:noteId/borrar", noteController.delete);
-  app.get("/usuario/:username/like/:note", (req, res) => userController.like(req, res));
+  app.get("/usuario/:username/like/:note", (req, res) =>
+    userController.like(req, res)
+  );
   app.post("/usuario/:username/notes/follow");
 
   //username profile
-  app.get("/usuario/:username", (req, res) => userController.userPage(req, res));
+  app.get("/usuario/:username", (req, res) =>
+    userController.userPage(req, res)
+  );
 
   //configurate username profile
   app.post("/usuario/configuracion/imagen", (req, res) =>
@@ -31,8 +39,12 @@ const routes = (app) => {
   );
 
   // interactions about followers
-  app.get("/usuario/:username/follow", (req, res) => userController.follow(req, res));
-  app.get("usuario/:username/unfollow", (req, res) => userController.unfollow(req, res));
+  app.get("/usuario/:username/follow", (req, res) =>
+    userController.follow(req, res)
+  );
+  app.get("usuario/:username/unfollow", (req, res) =>
+    userController.unfollow(req, res)
+  );
   app.get("/suggestionfollowers", (req, res) =>
     userController.suggestionFollowers(req, res)
   );

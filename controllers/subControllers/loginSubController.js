@@ -32,7 +32,8 @@ const loginSubController = async (req, res) => {
   const token = jwt.sign({ id: user._id }, process.env.SECRET, {
     expiresIn: 60 * 60 * 60,
   });
-  db.User.update({ _id: user._id }, { $push: { tokens: token } });
+  user.tokens.push(token);
+  user.save();
   res.json({ auth: true, token });
 };
 module.exports = loginSubController;

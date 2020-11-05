@@ -1,5 +1,6 @@
 const formidable = require("formidable");
 const validateLoginSubController = require("./validateLoginSubController");
+const db = require("../../models/mongoose");
 const AWS = require("aws-sdk");
 const fs = require("fs");
 const path = require("path");
@@ -63,7 +64,7 @@ const modifyProfileImageSubController = async (req, res) => {
         Body: fileContent,
       };
       s3.upload(params, async function (err, data) {
-        await db.User.update({ _id: req.user._id }, { avatar: data.Location });
+        // await db.User.update({ _id: user._id }, { avatar: data.Location }); --- Usar lo que dijo marcus
       });
     });
 

@@ -5,7 +5,8 @@ const path = require("path");
 const { routes } = require("./routes");
 
 // Configuracion app
-app.use(express.static(path.join(__dirname, "public")));
+
+app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

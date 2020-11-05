@@ -11,7 +11,7 @@ const routes = (app) => {
   app.delete("/users/:username", userController.delete); //Para borrar token
 
   //users
-  app.use([middlewareJwt.checkJwt, middlewareJwt.JwtInUserArray]);
+  // app.use([middlewareJwt.checkJwt, middlewareJwt.JwtInUserArray]);
   app.put("/users/:username", userController.updateImg); //Modificar imagen
   app.patch("/users/:username", userController.updateData); //Modificr datos
   app.get("/users/list/:username", userController.all); //Tweets de la home

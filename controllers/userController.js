@@ -50,9 +50,15 @@ const userController = {
     res.json({ auth: true, token });
   },
 
-  show: (req, res) => {
-    null;
+  show: async (req, res) => {
+    res.send("joajsoas");
+    console.log(req.params);
+    // const username = req.params.username;
+    // const user = db.User.findOne({ username: username }, { token: 0, password: 0 });
+    // res.json(user);
+    res.send("hola");
   },
+
   delete: (req, res) => {
     null;
   },

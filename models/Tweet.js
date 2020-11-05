@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const noteSchema = new Schema(
+const tweetSchema = new Schema(
   {
     content: String,
     author: {
@@ -15,4 +15,4 @@ const noteSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = noteSchema;
+module.exports = tweetSchema;

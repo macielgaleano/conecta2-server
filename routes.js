@@ -1,52 +1,34 @@
-const noteController = require("./controllers/noteController");
+const tweetController = require("./controllers/tweetController");
 const userController = require("./controllers/userController");
+const middlewareJwt = require("./middlewareJwt");
 const checkJwt = require("express-jwt");
 const seeder = require("./seeder");
 const routes = (app) => {
-  //Api
-
-  app.get("/api/list/users", (req, res) => userController.listUsers(req, res));
-
   //login
-  app.post("/registro", userController.createUser);
-  app.post("/login", userController.login);
+  app.post("/users", userController.store); //Para crear un nuevo usuario
+  app.post("/login", userController.login); //Para registrarse
+  app.get("/users/:username", userController.show); //Para mostrar un solo usuario
+  app.delete("/users/:username", userController.delete); //Para borrar token
+
+  //users
+  app.use([middlewareJwt.checkJwt, middlewareJwt.JwtInUserArray]);
+  app.put("/users/:username", userController.updateImg); //Modificar imagen
+  app.patch("/users/:username", userController.updateData); //Modificr datos
+  app.get("/users/list/:username", userController.all); //Tweets de la home
+  app.patch("/users/follow/:username", userController.updateFollow);
+  app.patch("/users/unfollow/:username", userController.updateUnfollow);
+  app.get("/users/suggestion", userController.allSuggestion);
 
   //create first data
   app.get("/creardata", seeder.createData);
 
-  //notes
-  app.post(
-    "/note/crear",
-    checkJwt({ secret: process.env.SECRET, algorithms: ["HS256"] }),
-    noteController.createNote
-  );
-  app.get("/usuario/:noteId/borrar", noteController.delete);
-  app.get("/usuario/:username/like/:note", (req, res) => userController.like(req, res));
-  app.post("/usuario/:username/notes/follow");
-
-  //username profile
-  app.get("/usuario/:username", (req, res) => userController.userPage(req, res));
-
-  //configurate username profile
-  app.post("/usuario/configuracion/imagen", (req, res) =>
-    userController.modifyProfileImage(req, res)
-  );
-  app.post("/usuario/configuracion/datos", (req, res) =>
-    userController.modifyProfileData(req, res)
-  );
-
-  // interactions about followers
-  app.get("/usuario/:username/follow", (req, res) => userController.follow(req, res));
-  app.get("usuario/:username/unfollow", (req, res) => userController.unfollow(req, res));
-  app.get("/suggestionfollowers", (req, res) =>
-    userController.suggestionFollowers(req, res)
-  );
-
-  //delete token
-  app.get("/usuario/:username/borrar/key", (req, res) =>
-    userController.deleteKey(req, res)
-  );
+  //Tweets
+  app.post("/tweets", tweetController.store);
+  app.delete("/tweets/:tweetid", tweetController.delete);
+  app.patch("/tweets/:tweetid", tweetController.updateLike);
 };
 module.exports = {
   routes,
 };
+
+//

@@ -63,10 +63,8 @@ const modifyProfileImageSubController = async (req, res) => {
         Body: fileContent,
       };
       s3.upload(params, async function (err, data) {
-        console.log(data.Location);
+        await db.User.update({ _id: req.user._id }, { avatar: data.Location });
       });
-
-      // await db.User.update({ _id: req.user._id }, { avatar: imagen });
     });
 
     return res.send(true);

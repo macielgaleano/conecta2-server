@@ -1,5 +1,6 @@
 const noteController = require("./controllers/noteController");
 const userController = require("./controllers/userController");
+const checkJwt = require("express-jwt");
 const seeder = require("./seeder");
 const routes = (app) => {
   //Api

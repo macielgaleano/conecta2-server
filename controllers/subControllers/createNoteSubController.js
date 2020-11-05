@@ -15,18 +15,18 @@ const createNoteSubController = async (req, res) => {
       process.env.SECRET
     ); */
 
-  const user = await db.User.find(
+  /* const user = await db.User.find(
     {
       tokens: {
         $in: [decoded],
       },
     },
     { password: 0 }
-  );
+  ); */
 
   const note = new db.Note({
     content: req.body.content,
-    author: user._id,
+    author: req.user._id,
     date_created: Date.now(),
   });
   await note.save();

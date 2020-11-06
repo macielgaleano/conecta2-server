@@ -3,6 +3,7 @@ const userController = require("./controllers/userController");
 const authController = require("./controllers/authController");
 const JwtInUserArray = require("./middlewares/JwtInUserArray");
 const checkJwt = require("express-jwt");
+const cors = require("cors");
 const seeder = require("./seeder");
 const routes = (app) => {
   //create first data
@@ -15,6 +16,7 @@ const routes = (app) => {
 
   //users
   app.use(checkJwt({ secret: process.env.SECRET, algorithms: ["HS256"] }));
+  // app.use(cors);
   app.use(JwtInUserArray);
   app.delete("/users/:username", authController.delete); //Para borrar token'
   app.put("/users/:username", userController.updateImg); //Modificar imagen

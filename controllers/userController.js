@@ -84,28 +84,26 @@ const userController = {
     });
     form.parse(req, async (err, fields, files) => {
       if (files) {
-        const imagen = "./public/images/" + path.basename(files.path);
+        console.log(files);
+        const imagen = "./public/images/" + path.basename(files.imagen.path);
         const fileContent = fs.readFileSync(imagen);
         const params = {
           ACL: "public-read",
           Bucket: process.env.AWS_BUCKET_NAME,
-          Key: path.basename(files.foto.path),
+          Key: path.basename(files.imagen.path),
           ContentType: "image/jpeg",
           Body: fileContent,
         };
         s3.upload(params, async function (err, data) {
-          console.log(data.Location, req.user.id);
-          await db.User.findByIdAndRemove(
-            { _id: req.user.id },
-            { avatar: data.Location }
-          );
+          const user = await db.User.find({ _id: req.user.id });
+          user.avatar = data.Location;
+          user.sava();
+          return res.json({ status: 200, data: data.location });
         });
       } else {
         res.status(500).json({ message: "Internal server error" });
       }
     });
-
-    return res.send(true);
   },
 
   updateData: async (req, res) => {

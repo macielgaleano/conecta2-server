@@ -20,9 +20,7 @@ const tweetController = {
   delete: async (req, res) => {
     const tweet = await db.Tweet.deleteOne({ tweet: req.params.tweetId });
 
-    res
-      .status(200)
-      .json({ status: 200, message: "tweet eliminado correctamente" });
+    res.status(200).json({ status: 200, message: "tweet eliminado correctamente" });
   },
 
   updateLike: async (req, res) => {
@@ -35,9 +33,9 @@ const tweetController = {
       console.log(validation.length, validation);
       validation.length > 0 ? (tweet.likes = forDelete) : tweet.likes.push(req.user.id);
       tweet.save();
-      res.status(200).json({ message: "200OK", tweet: tweet });
+      res.status(200).json({ status: 200, message: "200OK", tweet: tweet });
     } else {
-      res.status(403).json({ message: "404, el recurso no existe" });
+      res.status(403).json({ status: 403, message: "404, el recurso no existe" });
     }
   },
 };

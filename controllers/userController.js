@@ -45,11 +45,15 @@ const userController = {
       { username: req.params.username },
       { token: 0, password: 0 }
     );
-    res.json(
-      await db.Tweet.find({ author: user._id }).sort({
-        date_created: "desc",
-      })
-    );
+    if (user !== null) {
+      return res.json(
+        await db.Tweet.find({ author: user._id }).sort({
+          date_created: "desc",
+        })
+      );
+    } else {
+      res.status(403).json({ message: "404, el recurso no existe" });
+    }
   },
 
   //Users
@@ -62,14 +66,13 @@ const userController = {
     };
     s3.putBucketPolicy(bucketPolicyParams, function (err, data) {
       if (err) {
-        // display error message
-        console.log("Error");
+        res.status(500).json({ message: "Internal server error" + err });
       } else {
         console.log("Success");
       }
     });
     s3.createBucket({ Bucket: process.env.AWS_BUCKET_NAME }, function (err, data) {
-      if (err) console.log(err, err.stack);
+      if (err) res.status(500).json({ message: "Internal server error" + err });
       else console.log("Bucket Created Successfully", data.Location);
     });
 
@@ -79,18 +82,26 @@ const userController = {
       keepExtensions: true,
     });
     form.parse(req, async (err, fields, files) => {
-      const imagen = "./public/images/" + path.basename(files.foto.path);
-      const fileContent = fs.readFileSync(imagen);
-      const params = {
-        ACL: "public-read",
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: path.basename(files.foto.path),
-        ContentType: "image/jpeg",
-        Body: fileContent,
-      };
-      s3.upload(params, async function (err, data) {
-        await db.User.update({ _id: req.user.id }, { avatar: data.Location });
-      });
+      if (files) {
+        const imagen = "./public/images/" + path.basename(files.path);
+        const fileContent = fs.readFileSync(imagen);
+        const params = {
+          ACL: "public-read",
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: path.basename(files.foto.path),
+          ContentType: "image/jpeg",
+          Body: fileContent,
+        };
+        s3.upload(params, async function (err, data) {
+          console.log(data.Location, req.user.id);
+          await db.User.findByIdAndRemove(
+            { _id: req.user.id },
+            { avatar: data.Location }
+          );
+        });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
+      }
     });
 
     return res.send(true);

@@ -26,24 +26,16 @@ const tweetController = {
   },
 
   updateLike: async (req, res) => {
-    console.log(req.params.tweetid, req.user.id);
     let tweet = await db.Tweet.findOne({
-      $and: [
-        { _id: req.params.tweetid },
-        {
-          likes: {
-            $in: [req.user.id],
-          },
-        },
-      ],
+      _id: req.params.tweetid,
     });
-    console.log(tweet);
     if (tweet !== null) {
-      tweet
-        ? tweet.likes.filter((el) => el !== req.user.id)
-        : tweet.likes.push(req.user.id);
+      const validation = tweet.likes.filter((el) => el !== req.user.id);
+      const forDelete = tweet.likes.filter((el) => el === req.user.id);
+      console.log(validation.length, validation);
+      validation.length > 0 ? (tweet.likes = forDelete) : tweet.likes.push(req.user.id);
       tweet.save();
-      res.status.json({ message: "200OK" });
+      res.status(200).json({ message: "200OK", tweet: tweet });
     } else {
       res.status(403).json({ message: "404, el recurso no existe" });
     }

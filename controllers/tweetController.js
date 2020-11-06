@@ -18,17 +18,11 @@ const tweetController = {
   },
 
   delete: async (req, res) => {
-    const tweet = await db.Tweet.findOneAndUpdate(
-      { tweet: req.params.tweetId }
-      /*  {tweet: } */
-    );
-    await tweet.save();
-    /* if (user) {
-        res.status(200).json({ message: "200 OK, token eliminado" });
-      } else {
-        res.status(404).json({ message: "404, datos invalidos" });
-      } */
-    res.json(tweet);
+    const tweet = await db.Tweet.deleteOne({ tweet: req.params.tweetId });
+
+    res
+      .status(200)
+      .json({ status: 200, message: "tweet eliminado correctamente" });
   },
 
   updateLike: async (req, res) => {

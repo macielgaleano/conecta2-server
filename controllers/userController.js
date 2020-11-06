@@ -5,6 +5,7 @@ const AWS = require("aws-sdk");
 const fs = require("fs");
 const path = require("path");
 var jwt = require("jsonwebtoken");
+const { send } = require("process");
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_ID,
@@ -129,6 +130,31 @@ const userController = {
       }
     });
   },
+  allSuggestion: async (req, res) => {
+    let users = await db.User.find({
+      _id: {
+        $nor: req.user.id,
+      },
+    }).select("_id");
+    let users_id = [];
+    users.forEach((user) => {
+      users_id.push(user._id);
+    });
+    let foollowing = await db.User.find({
+      $and: [
+        {
+          list_users_following: {
+            $nin: users_id,
+          },
+        },
+      ],
+    })
+      .limit(6)
+      .select("_id username name lastname avatar")
+      .exec((err, items) => {
+        return res.json(items);
+      });
+  },
   all: (req, res) => {
     null;
   },
@@ -136,9 +162,6 @@ const userController = {
     null;
   },
   updateUnfollow: (req, res) => {
-    null;
-  },
-  allSuggestion: (req, res) => {
     null;
   },
 };

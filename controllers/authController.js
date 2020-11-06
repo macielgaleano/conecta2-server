@@ -17,6 +17,7 @@ const authController = {
       });
       if (!user) {
         return res.status(401).send({
+          status: 401,
           message: "Credenciales invalidas",
         });
       }
@@ -24,6 +25,7 @@ const authController = {
 
       if (!passwordIsValid) {
         return res.status(401).json({
+          status: 401,
           message: "Credenciales invalidas",
         });
       }
@@ -41,12 +43,12 @@ const authController = {
     if (req.user) {
       let user = await db.User.findOneAndUpdate({ _id: req.user.id }, { tokens: [] });
       if (user) {
-        res.status(200).json({ message: "200 OK, token eliminado" });
+        res.status(200).json({ status: 200, message: "200 OK, token eliminado" });
       } else {
-        res.status(404).json({ message: "404, datos invalidos" });
+        res.status(404).json({ status: 404, message: "404, datos invalidos" });
       }
     } else {
-      res.status(403).json({ message: "401, no se recibio un token" });
+      res.status(403).json({ status: 401, message: "401, no se recibio un token" });
     }
   },
 };

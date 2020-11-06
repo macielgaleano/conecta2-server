@@ -5,6 +5,9 @@ const JwtInUserArray = require("./middlewares/JwtInUserArray");
 const checkJwt = require("express-jwt");
 const seeder = require("./seeder");
 const routes = (app) => {
+  //create first data
+  app.get("/creardata", seeder.createData);
+
   //login
   app.post("/users", userController.store); //Para crear un nuevo usuario
   app.post("/login", authController.login); //Para registrarse
@@ -20,9 +23,6 @@ const routes = (app) => {
   app.patch("/users/follow/:username", userController.updateFollow);
   app.patch("/users/unfollow/:username", userController.updateUnfollow);
   app.get("/users/suggestion", userController.allSuggestion);
-
-  //create first data
-  app.get("/creardata", seeder.createData);
 
   //Tweets
   app.post("/tweets", tweetController.store);

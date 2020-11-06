@@ -25,6 +25,7 @@ const tweetController = {
       tweet
         ? tweet.likes.filter((el) => el !== req.user.id)
         : tweet.likes.push(req.user.id);
+      tweet.save();
       res.status.json({ message: "200OK" });
     } else {
       res.status(403).json({ message: "404, el recurso no existe" });

@@ -24,6 +24,10 @@ userSchema.methods.validatePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+userSchema.methods.hashPassword = async function (password) {
+  return bcrypt.hashSync(password, 10);
+};
+
 userSchema.pre("save", function (next) {
   var user = this;
   if (!user.isModified("password")) return next();

@@ -18,7 +18,7 @@ const routes = (app) => {
   app.use(checkJwt({ secret: process.env.SECRET, algorithms: ["HS256"] }));
   // app.use(cors);
   app.use(JwtInUserArray);
-  app.get("/users/suggestion", userController.allSuggestion);
+  app.get("/users/suggestion/:username", userController.allSuggestion);
   app.get("/users", userController.all); //Tweets de la home
   app.delete("/users/:username", authController.delete); //Para borrar token'
   app.put("/users/:username", userController.updateImg); //Modificar imagen

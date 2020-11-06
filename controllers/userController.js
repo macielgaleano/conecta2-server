@@ -130,13 +130,13 @@ const userController = {
   },
   allSuggestion: async (req, res) => {
     let users = await db.User.find({
-      _id: {
-        $nor: req.user.id,
-      },
+      _id: req.user.id,
     }).select("_id");
     let users_id = [];
     users.forEach((user) => {
-      users_id.push(user._id);
+      if (user._id !== req.user.id) {
+        users_id.push(user._id);
+      }
     });
     let foollowing = await db.User.find({
       $and: [
@@ -157,7 +157,10 @@ const userController = {
     let folliwing = await db.User.find({ _id: req.user.id }).select(
       "list_users_following"
     );
-    res.json(folliwing);
+    folliwing = folliwing[0].list_users_following;
+    folliwing.push(req.user.id);
+    let tweets = await db.Tweet.find({ author: { $in: folliwing } });
+    res.json(tweets);
   },
 
   updateFollow: async (req, res) => {

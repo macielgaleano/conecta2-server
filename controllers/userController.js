@@ -2,6 +2,7 @@ const db = require("../models/mongoose");
 const { User } = require("../models/mongoose");
 const bcrypt = require("bcryptjs");
 const path = require("path");
+var jwt = require("jsonwebtoken");
 
 const userController = {
   //Static
@@ -20,47 +21,55 @@ const userController = {
   },
 
   login: async (req, res) => {
-    const { userEmail, password } = req.body;
-    const user = await db.User.findOne({
-      $or: [
-        {
-          email: userEmail,
-        },
-        {
-          username: userEmail,
-        },
-      ],
-    });
-    if (!user) {
-      return res.status(404).send({
-        auth: false,
+    try {
+      const { userEmail, password } = req.body;
+      const user = await db.User.findOne({
+        $or: [
+          {
+            email: userEmail,
+          },
+          {
+            username: userEmail,
+          },
+        ],
       });
-    }
-    const passwordIsValid = await user.validatePassword(password);
-    if (!passwordIsValid) {
-      return res.status(401).json({
-        auth: false,
+      if (!user) {
+        return res.status(400).send({
+          auth: false,
+        });
+      }
+      const passwordIsValid = await user.validatePassword(password);
+
+      if (!passwordIsValid) {
+        return res.status(401).json({
+          auth: false,
+        });
+      }
+      const token = jwt.sign({ id: user.id }, process.env.SECRET, {
+        expiresIn: 60 * 60 * 60,
       });
+      user.tokens.push(token);
+      user.save();
+      res.json({ auth: true, token });
+    } catch (error) {
+      console.log(error);
     }
-    const token = jwt.sign({ id: user.id }, process.env.SECRET, {
-      expiresIn: 60 * 60 * 60,
-    });
-    user.tokens.push(token);
-    user.save();
-    res.json({ auth: true, token });
   },
 
   show: async (req, res) => {
-    res.send("joajsoas");
-    console.log(req.params);
-    // const username = req.params.username;
-    // const user = db.User.findOne({ username: username }, { token: 0, password: 0 });
-    // res.json(user);
-    res.send("hola");
+    const user = await db.User.findOne(
+      { username: req.params.username },
+      { token: 0, password: 0 }
+    );
+    res.json(
+      await db.Tweet.find({ author: user._id }).sort({
+        date_created: "desc",
+      })
+    );
   },
 
   delete: (req, res) => {
-    null;
+    console.log(req.user);
   },
 
   //Users

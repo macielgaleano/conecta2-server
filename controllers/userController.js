@@ -72,10 +72,7 @@ const userController = {
         console.log("Success");
       }
     });
-    s3.createBucket({ Bucket: process.env.AWS_BUCKET_NAME }, function (
-      err,
-      data
-    ) {
+    s3.createBucket({ Bucket: process.env.AWS_BUCKET_NAME }, function (err, data) {
       if (err) res.status(500).json({ message: "Internal server error" + err });
       else console.log("Bucket Created Successfully", data.Location);
     });
@@ -161,20 +158,42 @@ const userController = {
   },
 
   updateFollow: async (req, res) => {
-    let user = await db.User.find({ username: req.params.username }).select(
-      "_id"
-    );
-    await db.User.findOneAndUpdate(
-      { _id: user },
-      { $push: { list_users_followers: req.user.id } },
-      { new: true }
-    );
-    await db.User.updateOne(
-      { _id: req.user.id },
-      { $push: { list_users_following: user[0]._id } },
-      { new: true }
-    );
-    res.status(200).json({ status: 200, message: "Has seguido a tu amigo" });
+    let user = await db.User.findOne({ username: req.params.username }).select("_id");
+    let following = await db.User.find({
+      _id: req.user.id,
+    }).select("list_users_following");
+    const aux = following[0].list_users_following;
+    let following_question = false;
+    aux.forEach((el) => {
+      String(el) === String(user._id)
+        ? (following_question = true)
+        : (following_question = false);
+    });
+    if (following_question === false) {
+      await db.User.findOneAndUpdate(
+        { _id: user },
+        { $push: { list_users_followers: req.user.id } },
+        { new: true }
+      );
+      await db.User.updateOne(
+        { _id: req.user.id },
+        { $push: { list_users_following: user._id } },
+        { new: true }
+      );
+      res.status(200).json({ status: 200, message: "Has seguido a tu amigo" });
+    } else {
+      await db.User.findOneAndUpdate(
+        { _id: user },
+        { $pull: { list_users_followers: req.user.id } },
+        { new: true }
+      );
+      await db.User.findOneAndUpdate(
+        { _id: req.user.id },
+        { $pull: { list_users_following: user._id } },
+        { new: true }
+      );
+      res.status(200).json({ status: 200, message: "Has dejado de seguir a tu amigo" });
+    }
   },
 
   updateUnfollow: (req, res) => {

@@ -23,7 +23,6 @@ const routes = (app) => {
   app.patch("/users/:username", userController.updateData); //Modificr datos
   app.get("/users/list/:username", userController.all); //Tweets de la home
   app.patch("/users/follow/:username", userController.updateFollow);
-  app.patch("/users/unfollow/:username", userController.updateUnfollow);
   app.get("/users/suggestion", userController.allSuggestion);
 
   //Tweets

@@ -1,4 +1,5 @@
 const db = require("../models/mongoose");
+const userController = require("./userController");
 
 const tweetController = {
   store: async (req, res) => {
@@ -18,11 +19,22 @@ const tweetController = {
   },
 
   delete: async (req, res) => {
-    const tweet = await db.Tweet.deleteOne({ tweet: req.params.tweetId });
+    const tweet = await db.Tweet.deleteOne({ _id: req.params.tweetid });
 
-    res
-      .status(200)
-      .json({ status: 200, message: "tweet eliminado correctamente" });
+    const user = await db.User.findOne({ _id: req.user.id });
+
+    if (user) {
+      const arrAux = user.list_tweets.filter((tweet) => {
+        /*  console.log(tweet, tweet._id, req.params.tweetid); */
+        tweet == req.params.tweetid;
+      });
+      console.log(arrAux);
+      /* user.list_tweets = arrAux; */
+      user.save();
+      res
+        .status(200)
+        .json({ status: 200, message: "tweet eliminado correctamente" });
+    }
   },
 
   updateLike: async (req, res) => {
@@ -33,7 +45,9 @@ const tweetController = {
       const validation = tweet.likes.filter((el) => el !== req.user.id);
       const forDelete = tweet.likes.filter((el) => el === req.user.id);
       console.log(validation.length, validation);
-      validation.length > 0 ? (tweet.likes = forDelete) : tweet.likes.push(req.user.id);
+      validation.length > 0
+        ? (tweet.likes = forDelete)
+        : tweet.likes.push(req.user.id);
       tweet.save();
       res.status(200).json({ message: "200OK", tweet: tweet });
     } else {

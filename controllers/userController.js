@@ -20,42 +20,6 @@ const userController = {
     res.json(user);
   },
 
-  login: async (req, res) => {
-    try {
-      const { userEmail, password } = req.body;
-      const user = await db.User.findOne({
-        $or: [
-          {
-            email: userEmail,
-          },
-          {
-            username: userEmail,
-          },
-        ],
-      });
-      if (!user) {
-        return res.status(400).send({
-          auth: false,
-        });
-      }
-      const passwordIsValid = await user.validatePassword(password);
-
-      if (!passwordIsValid) {
-        return res.status(401).json({
-          auth: false,
-        });
-      }
-      const token = jwt.sign({ id: user.id }, process.env.SECRET, {
-        expiresIn: 60 * 60 * 60,
-      });
-      user.tokens.push(token);
-      user.save();
-      res.json({ auth: true, token });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
   show: async (req, res) => {
     const user = await db.User.findOne(
       { username: req.params.username },
@@ -66,10 +30,6 @@ const userController = {
         date_created: "desc",
       })
     );
-  },
-
-  delete: (req, res) => {
-    console.log(req.user);
   },
 
   //Users

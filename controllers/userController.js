@@ -72,7 +72,10 @@ const userController = {
         console.log("Success");
       }
     });
-    s3.createBucket({ Bucket: process.env.AWS_BUCKET_NAME }, function (err, data) {
+    s3.createBucket({ Bucket: process.env.AWS_BUCKET_NAME }, function (
+      err,
+      data
+    ) {
       if (err) res.status(500).json({ message: "Internal server error" + err });
       else console.log("Bucket Created Successfully", data.Location);
     });
@@ -158,9 +161,24 @@ const userController = {
   all: (req, res) => {
     null;
   },
-  updateFollow: (req, res) => {
-    null;
+
+  updateFollow: async (req, res) => {
+    let user = await db.User.find({ username: req.params.username }).select(
+      "_id"
+    );
+    await db.User.findOneAndUpdate(
+      { _id: user },
+      { $push: { list_users_followers: req.user.id } },
+      { new: true }
+    );
+    await db.User.updateOne(
+      { _id: req.user.id },
+      { $push: { list_users_following: user[0]._id } },
+      { new: true }
+    );
+    res.status(200).json({ status: 200, message: "Has seguido a tu amigo" });
   },
+
   updateUnfollow: (req, res) => {
     null;
   },

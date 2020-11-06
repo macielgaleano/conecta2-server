@@ -20,21 +20,10 @@ const tweetController = {
 
   delete: async (req, res) => {
     const tweet = await db.Tweet.deleteOne({ _id: req.params.tweetid });
-
-    const user = await db.User.findOne({ _id: req.user.id });
-
-    if (user) {
-      const arrAux = user.list_tweets.filter((tweet) => {
-        /*  console.log(tweet, tweet._id, req.params.tweetid); */
-        tweet == req.params.tweetid;
-      });
-      console.log(arrAux);
-      /* user.list_tweets = arrAux; */
-      user.save();
-      res
-        .status(200)
-        .json({ status: 200, message: "tweet eliminado correctamente" });
-    }
+    await db.User.findByIdAndUpdate(req.user.id, {
+      $pull: { list_tweets: req.param.tweetid },
+    });
+    res.status(200).json({ status: 200, message: "tweet eliminado correctamente" });
   },
 
   updateLike: async (req, res) => {
@@ -45,15 +34,11 @@ const tweetController = {
       const validation = tweet.likes.filter((el) => el !== req.user.id);
       const forDelete = tweet.likes.filter((el) => el === req.user.id);
       console.log(validation.length, validation);
-      validation.length > 0
-        ? (tweet.likes = forDelete)
-        : tweet.likes.push(req.user.id);
+      validation.length > 0 ? (tweet.likes = forDelete) : tweet.likes.push(req.user.id);
       tweet.save();
       res.status(200).json({ status: 200, message: "200OK", tweet: tweet });
     } else {
-      res
-        .status(403)
-        .json({ status: 403, message: "404, el recurso no existe" });
+      res.status(403).json({ status: 403, message: "404, el recurso no existe" });
     }
   },
 };

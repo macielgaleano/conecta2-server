@@ -115,7 +115,7 @@ const userController = {
         lastname: req.body.lastname,
         description: req.body.description,
         email: req.body.email,
-        password: User.hashPassword(req.body.password),
+        password: req.body.password,
       }
     ).exec((user, err) => {
       if (user) {
@@ -153,8 +153,11 @@ const userController = {
         return res.json(items);
       });
   },
-  all: (req, res) => {
-    null;
+  all: async (req, res) => {
+    let folliwing = await db.User.find({ _id: req.user.id }).select(
+      "list_users_following"
+    );
+    res.json(folliwing);
   },
 
   updateFollow: async (req, res) => {

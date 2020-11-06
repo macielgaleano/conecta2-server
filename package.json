@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "description": "Twitter(servidor) ",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./index.js"
-  },
+  "scripts": { "serve": "nodemon server.js" },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/macielgaleano/conecta2-server.git"

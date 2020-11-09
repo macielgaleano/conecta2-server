@@ -162,9 +162,9 @@ const userController = {
       });
   },
   all: async (req, res) => {
-    let folliwing = await db.User.find({ _id: req.user.id }).select(
-      "list_users_following"
-    );
+    let folliwing = await db.Tweet.find({ author: req.user.id })
+      .populate("author")
+      .select("list_users_following");
     folliwing = folliwing[0].list_users_following;
     folliwing.push(req.user.id);
     let tweets = await db.Tweet.find({ author: { $in: folliwing } });

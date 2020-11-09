@@ -49,7 +49,7 @@ const userController = {
             email: req.params.username,
           },
           {
-            _id: req.params.username,
+            _id: mongoose.Types.ObjectId(req.params.username),
           },
           {
             username: req.params.username,

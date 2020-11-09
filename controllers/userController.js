@@ -48,8 +48,12 @@ const userController = {
           {
             email: req.params.username,
           },
+
           {
             username: req.params.username,
+          },
+          {
+            _id: req.params.username,
           },
         ],
       },

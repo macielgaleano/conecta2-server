@@ -51,11 +51,17 @@ const userController = {
           {
             email: req.params.username,
           },
+          {
+            _id: req.params.username,
+          },
         ],
       },
       { token: 0, password: 0 }
     );
-    let tweets = await db.Tweet.find({ author: user._id }).sort({
+    let tweets = await db.Tweet.find(
+      { author: user._id },
+      { token: 0, password: 0 }
+    ).sort({
       date_created: "desc",
     });
     if (user !== null) {

@@ -7,8 +7,9 @@ const cors = require("cors");
 const seeder = require("./seeder");
 const routes = (app) => {
   //create first data
+  app.use(cors())
   app.get("/creardata", seeder.createData);
-
+  
   //login
   app.post("/users", userController.store); //Para crear un nuevo usuario
   app.post("/login", authController.login); //Para registrarse

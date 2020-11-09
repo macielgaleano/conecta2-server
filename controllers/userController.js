@@ -43,7 +43,16 @@ const userController = {
 
   show: async (req, res) => {
     const user = await db.User.findOne(
-      { username: req.params.username },
+      {
+        $or: [
+          {
+            username: req.params.username,
+          },
+          {
+            email: req.params.username,
+          },
+        ],
+      },
       { token: 0, password: 0 }
     );
     if (user !== null) {

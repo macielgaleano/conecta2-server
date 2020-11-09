@@ -6,12 +6,8 @@ const checkJwt = require("express-jwt");
 const cors = require("cors");
 const seeder = require("./seeder");
 const routes = (app) => {
-  var corsOptions = {
-    origin: "https://conecta2-server.vercel.app/",
-    optionsSuccessStatus: 200, // For legacy browser support
-  };
   //create first data
-  app.use(cors(corsOptions));
+  app.use(cors());
 
   app.get("/creardata", seeder.createData);
 

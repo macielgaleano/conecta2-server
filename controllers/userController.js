@@ -59,7 +59,7 @@ const userController = {
       date_created: "desc",
     });
     if (user !== null) {
-      return res.json(tweets, user);
+      return res.json([tweets, user]);
     } else {
       res.status(403).json({ message: "404, el recurso no existe" });
     }

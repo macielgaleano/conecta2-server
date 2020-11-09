@@ -55,12 +55,11 @@ const userController = {
       },
       { token: 0, password: 0 }
     );
+    let tweets = await db.Tweet.find({ author: user._id }).sort({
+      date_created: "desc",
+    });
     if (user !== null) {
-      return res.json(
-        await db.Tweet.find({ author: user._id }).sort({
-          date_created: "desc",
-        })
-      );
+      return res.json(tweets, user);
     } else {
       res.status(403).json({ message: "404, el recurso no existe" });
     }

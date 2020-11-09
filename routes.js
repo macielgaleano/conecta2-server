@@ -7,9 +7,9 @@ const cors = require("cors");
 const seeder = require("./seeder");
 const routes = (app) => {
   //create first data
-  app.use(cors())
+  app.use(cors());
   app.get("/creardata", seeder.createData);
-  
+
   //login
   app.post("/users", userController.store); //Para crear un nuevo usuario
   app.post("/login", authController.login); //Para registrarse
@@ -17,7 +17,7 @@ const routes = (app) => {
 
   //users
   app.use(checkJwt({ secret: process.env.SECRET, algorithms: ["HS256"] }));
-  // app.use(cors);
+
   app.use(JwtInUserArray);
   app.get("/users/suggestion/:username", userController.allSuggestion);
   app.get("/users", userController.all); //Tweets de la home

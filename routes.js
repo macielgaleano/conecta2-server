@@ -16,7 +16,7 @@ const routes = (app) => {
 
   //users
   app.use(checkJwt({ secret: process.env.SECRET, algorithms: ["HS256"] }));
-  // app.use(cors);
+  app.use(cors);
   app.use(JwtInUserArray);
   app.get("/users/suggestion/:username", userController.allSuggestion);
   app.get("/users", userController.all); //Tweets de la home

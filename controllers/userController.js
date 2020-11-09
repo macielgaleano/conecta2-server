@@ -46,13 +46,13 @@ const userController = {
       {
         $or: [
           {
-            username: req.params.username,
-          },
-          {
             email: req.params.username,
           },
           {
             _id: req.params.username,
+          },
+          {
+            username: req.params.username,
           },
         ],
       },
